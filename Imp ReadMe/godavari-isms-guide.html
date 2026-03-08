@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Godavari Pushkaralu AI-ISMS — Technical Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap');
+
+  :root {
+    --ink: #0a0e1a;
+    --paper: #f5f0e8;
+    --orange: #e85d04;
+    --orange-light: #ffd6b8;
+    --blue: #0d47a1;
+    --blue-mid: #1565c0;
+    --green: #1b5e20;
+    --yellow: #f57f17;
+    --red: #b71c1c;
+    --river: #1565c0;
+    --grid: rgba(232,93,4,0.08);
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    background-image:
+      repeating-linear-gradient(0deg, var(--grid) 0, var(--grid) 1px, transparent 1px, transparent 48px),
+      repeating-linear-gradient(90deg, var(--grid) 0, var(--grid) 1px, transparent 1px, transparent 48px);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 60px 60px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--orange);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(232,93,4,0.06) 0, rgba(232,93,4,0.06) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(232,93,4,0.06) 0, rgba(232,93,4,0.06) 1px, transparent 1px, transparent 40px);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: rgba(245,240,232,0.55);
+    margin-top: 16px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 48px;
+    position: relative;
+    z-index: 1;
+  }
+  .stat-item { border-left: 3px solid var(--orange); padding-left: 16px; }
+  .stat-num { font-size: 32px; font-weight: 800; color: var(--orange); line-height: 1; }
+  .stat-label { font-family: var(--mono); font-size: 10px; color: rgba(245,240,232,0.5); letter-spacing: 2px; margin-top: 4px; text-transform: uppercase; }
+  .hero-river {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 45%;
+    height: 100%;
+    opacity: 0.07;
+    background: linear-gradient(135deg, var(--river) 0%, transparent 60%);
+  }
+
+  /* NAV */
+  .toc {
+    background: var(--ink);
+    padding: 0 60px;
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(245,240,232,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+  }
+  .toc a {
+    display: block;
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 14px 20px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .toc a:hover { color: var(--orange); border-bottom-color: var(--orange); }
+
+  /* SECTIONS */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 60px;
+    border-bottom: 1px solid rgba(10,14,26,0.12);
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 40px;
+  }
+  .section h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  p { line-height: 1.7; color: rgba(10,14,26,0.75); font-size: 15px; margin-bottom: 16px; }
+
+  /* FLOW DIAGRAM */
+  .flow-wrap { overflow-x: auto; padding-bottom: 10px; }
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    min-width: 900px;
+  }
+  .flow-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .flow-col-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-align: center;
+    padding: 8px;
+    background: rgba(232,93,4,0.06);
+    border: 1px solid rgba(232,93,4,0.2);
+    margin-bottom: 8px;
+  }
+  .flow-node {
+    border: 2px solid var(--ink);
+    padding: 12px 14px;
+    position: relative;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    background: var(--paper);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .flow-node:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); box-shadow: 4px 4px 0 var(--orange); }
+  .flow-node.source { border-color: var(--blue); background: #e3f2fd; }
+  .flow-node.source:hover { background: var(--blue); color: #fff; box-shadow: 4px 4px 0 var(--blue); }
+  .flow-node.process { border-color: var(--orange); background: #fff3e0; }
+  .flow-node.process:hover { background: var(--orange); color: #fff; }
+  .flow-node.output { border-color: var(--green); background: #e8f5e9; }
+  .flow-node.output:hover { background: var(--green); color: #fff; box-shadow: 4px 4px 0 var(--green); }
+  .flow-node.ai { border-color: #6a1b9a; background: #f3e5f5; }
+  .flow-node.ai:hover { background: #6a1b9a; color: #fff; box-shadow: 4px 4px 0 #6a1b9a; }
+  .flow-node .node-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    font-size: 22px;
+    color: var(--orange);
+    font-weight: 800;
+    flex-shrink: 0;
+    padding-top: 48px;
+  }
+
+  /* ARCHITECTURE DIAGRAM */
+  .arch {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+    overflow: hidden;
+  }
+  .arch-layer {
+    background: var(--paper);
+    padding: 28px 24px;
+  }
+  .arch-layer-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid;
+  }
+  .arch-layer.layer-1 .arch-layer-title { color: var(--blue); border-color: var(--blue); }
+  .arch-layer.layer-2 .arch-layer-title { color: var(--orange); border-color: var(--orange); }
+  .arch-layer.layer-3 .arch-layer-title { color: #6a1b9a; border-color: #6a1b9a; }
+  .arch-item {
+    font-size: 12px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    border-left: 3px solid;
+    background: rgba(10,14,26,0.03);
+  }
+  .arch-item strong { display: block; font-weight: 700; font-size: 11px; }
+  .arch-item span { font-family: var(--mono); font-size: 10px; color: rgba(10,14,26,0.5); }
+  .layer-1 .arch-item { border-color: var(--blue); }
+  .layer-2 .arch-item { border-color: var(--orange); }
+  .layer-3 .arch-item { border-color: #6a1b9a; }
+
+  /* COMPONENT CARDS */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2px;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+    margin-top: 32px;
+  }
+  .comp-card {
+    background: var(--paper);
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .comp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+  .comp-card.flask::before { background: var(--orange); }
+  .comp-card.simulator::before { background: var(--blue); }
+  .comp-card.ai::before { background: #6a1b9a; }
+  .comp-card.data::before { background: var(--green); }
+  .comp-card.ui::before { background: #c62828; }
+  .comp-file {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--ink);
+    color: var(--orange);
+    padding: 4px 10px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+  .comp-card h3 { font-size: 18px; margin-bottom: 10px; }
+  .comp-card p { font-size: 13px; margin-bottom: 12px; }
+  .feat-list { list-style: none; margin: 0; }
+  .feat-list li {
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(10,14,26,0.08);
+    display: flex;
+    gap: 8px;
+    color: rgba(10,14,26,0.7);
+  }
+  .feat-list li::before { content: '→'; color: var(--orange); font-weight: 700; flex-shrink: 0; }
+
+  /* DATA FLOW FULL */
+  .dataflow {
+    position: relative;
+    padding: 40px 0;
+  }
+  .df-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .df-box {
+    border: 2px solid var(--ink);
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    position: relative;
+    min-width: 160px;
+    text-align: center;
+  }
+  .df-box.src { background: #e3f2fd; border-color: var(--blue); color: var(--blue); }
+  .df-box.proc { background: #fff3e0; border-color: var(--orange); color: #bf360c; }
+  .df-box.store { background: #e8f5e9; border-color: var(--green); color: var(--green); }
+  .df-box.ai { background: #f3e5f5; border-color: #6a1b9a; color: #6a1b9a; }
+  .df-box.out { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .df-arrow { font-size: 18px; color: var(--orange); font-weight: 800; flex-shrink: 0; }
+  .df-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(10,14,26,0.4);
+    white-space: nowrap;
+  }
+  .df-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    opacity: 0.6;
+    display: block;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  /* ALERT LEVELS */
+  .alert-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+    margin-top: 24px;
+  }
+  .alert-cell {
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .alert-cell.g { background: #e8f5e9; }
+  .alert-cell.y { background: #fffde7; }
+  .alert-cell.o { background: #fff3e0; }
+  .alert-cell.r { background: #ffebee; }
+  .alert-cell.s { background: #f3e5f5; }
+  .alert-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  .badge-g { background: #2e7d32; }
+  .badge-y { background: #f57f17; }
+  .badge-o { background: #e65100; }
+  .badge-r { background: #c62828; }
+  .badge-s { background: #6a1b9a; }
+  .alert-cell p { font-size: 11px; margin: 0; line-height: 1.5; }
+  .alert-cell strong { display: block; font-size: 13px; margin-bottom: 6px; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--ink);
+    color: #a5f3c3;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    padding: 28px 32px;
+    margin: 24px 0;
+    border-left: 4px solid var(--orange);
+    overflow-x: auto;
+  }
+  .code-block .comment { color: rgba(165,243,195,0.35); }
+  .code-block .keyword { color: #f97316; }
+  .code-block .string { color: #fbbf24; }
+  .code-block .fn { color: #60a5fa; }
+
+  /* UPSTREAM / DOWNSTREAM TABLE */
+  .stream-table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+  .stream-table th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .stream-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(10,14,26,0.1);
+    vertical-align: top;
+  }
+  .stream-table tr:nth-child(even) td { background: rgba(10,14,26,0.03); }
+  .stream-table td:first-child {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--orange);
+    white-space: nowrap;
+  }
+  .tag-up { background: #e3f2fd; color: var(--blue); padding: 2px 8px; font-size: 10px; font-family: var(--mono); }
+  .tag-down { background: #e8f5e9; color: var(--green); padding: 2px 8px; font-size: 10px; font-family: var(--mono); }
+  .tag-internal { background: #fff3e0; color: var(--orange); padding: 2px 8px; font-size: 10px; font-family: var(--mono); }
+
+  /* SETUP STEPS */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    counter-increment: step;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(10,14,26,0.1);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: var(--ink);
+    color: var(--orange);
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+  }
+  .step-content h3 { margin-bottom: 8px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    letter-spacing: 1px;
+    border-top: 3px solid var(--orange);
+  }
+  footer span { color: var(--orange); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section { animation: fadeUp 0.5s ease both; }
+
+  /* INLINE PILL */
+  .pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    margin: 0 2px;
+    vertical-align: middle;
+  }
+
+  .divider { height: 2px; background: linear-gradient(90deg, var(--orange), transparent); margin: 40px 0; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero, .section, .toc { padding-left: 24px; padding-right: 24px; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; }
+    .arch { grid-template-columns: 1fr; }
+    .alert-grid { grid-template-columns: 1fr 1fr; }
+    .comp-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-river"></div>
+  <div class="hero-badge">Technical Reference · v1.0 · Confidential</div>
+  <h1>Godavari<br><span>AI-ISMS</span></h1>
+  <div class="hero-sub">AI-Powered Integrated Security Management System · Rajahmundry, Andhra Pradesh</div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">4,000+</div><div class="stat-label">Smart Cameras</div></div>
+    <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Ghat Zones</div></div>
+    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">AI Layers</div></div>
+    <div class="stat-item"><div class="stat-num">₹16.8Cr</div><div class="stat-label">Full Budget</div></div>
+    <div class="stat-item"><div class="stat-num">1M+</div><div class="stat-label">Pilgrims/Day</div></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="toc">
+  <a href="#overview">Overview</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#components">Components</a>
+  <a href="#dataflow">Data Flow</a>
+  <a href="#streams">Upstream / Downstream</a>
+  <a href="#alerts">Alert Levels</a>
+  <a href="#setup">Setup Guide</a>
+  <a href="#api">API Reference</a>
+</nav>
+
+<!-- OVERVIEW -->
+<section class="section" id="overview">
+  <div class="section-label">01 · Project Overview</div>
+  <h2>What This<br>System Does</h2>
+  <p>The Godavari Pushkaralu AI-ISMS is a real-time crowd safety platform for India's largest religious gathering. The system continuously ingests data from cameras and sensors distributed across all riverbank ghat zones, runs it through a multi-layer AI pipeline, and surfaces actionable alerts to command center operators — all within 3 seconds of a threshold breach.</p>
+  <p>The prototype (Phase 0 / MVP) runs entirely on a single machine using a simulation engine in place of live cameras, allowing full demonstration of all AI capabilities before the ₹16.8 Crore hardware procurement begins.</p>
+
+  <div class="divider"></div>
+
+  <h3>System Philosophy</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:var(--ink);border:2px solid var(--ink);margin-top:20px">
+    <div style="background:var(--paper);padding:28px 24px">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--orange);margin-bottom:12px">DETECT</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Real-Time Awareness</div>
+      <p style="font-size:13px">Every 2 seconds, crowd density, person count, and anomaly scores are refreshed for all 10 zones. No polling — operators see changes as they happen via WebSocket push.</p>
+    </div>
+    <div style="background:var(--paper);padding:28px 24px">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--orange);margin-bottom:12px">DECIDE</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">AI-Driven Scoring</div>
+      <p style="font-size:13px">The SLM engine maps raw crowd readings to a risk score using trained ML models. It factors density, inflow rate, temperature, rain, and historical patterns from Kumbh Mela data.</p>
+    </div>
+    <div style="background:var(--paper);padding:28px 24px">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--orange);margin-bottom:12px">RESPOND</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Actionable Narration</div>
+      <p style="font-size:13px">Claude (Anthropic API) auto-generates bilingual incident reports in English and Telugu the moment an alert fires — giving operators human-readable context in under 8 seconds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="section" id="architecture">
+  <div class="section-label">02 · System Architecture</div>
+  <h2>Three-Layer<br>AI Framework</h2>
+  <p>The system is structured as three concentric intelligence layers, each processing data at progressively higher abstraction and broader scope.</p>
+
+  <div class="arch" style="margin-top:32px">
+    <div class="arch-layer layer-1">
+      <div class="arch-layer-title">Layer 1 · Edge AI</div>
+      <div class="arch-item"><strong>YOLOv8n Model</strong><span>Person detection, crowd counting</span></div>
+      <div class="arch-item"><strong>OpenCV Pipeline</strong><span>Frame capture, preprocessing</span></div>
+      <div class="arch-item"><strong>Density Estimator</strong><span>Persons per m² per zone</span></div>
+      <div class="arch-item"><strong>Crowd Simulator</strong><span>Simulates 50 cameras in demo mode</span></div>
+      <div class="arch-item"><strong>Snapshot Publisher</strong><span>Pushes structured readings every 2s</span></div>
+    </div>
+    <div class="arch-layer layer-2">
+      <div class="arch-layer-title">Layer 2 · Zone Correlation</div>
+      <div class="arch-item"><strong>SLM Engine</strong><span>slm_engine.py — core ML scoring</span></div>
+      <div class="arch-item"><strong>Risk Scorer</strong><span>Multi-factor alert level prediction</span></div>
+      <div class="arch-item"><strong>Anomaly Detector</strong><span>Pattern deviation from baseline</span></div>
+      <div class="arch-item"><strong>Threshold Rules</strong><span>G/Y/O/R escalation logic</span></div>
+      <div class="arch-item"><strong>Alert Dispatcher</strong><span>Fires alerts to WebSocket + DB</span></div>
+    </div>
+    <div class="arch-layer layer-3">
+      <div class="arch-layer-title">Layer 3 · Central Gen AI</div>
+      <div class="arch-item"><strong>Claude API</strong><span>Incident narration (EN + TE)</span></div>
+      <div class="arch-item"><strong>LLM Reporter</strong><span>llm_reporter.py → Anthropic SDK</span></div>
+      <div class="arch-item"><strong>Response Templates</strong><span>response_templates.json base</span></div>
+      <div class="arch-item"><strong>Historical Learning</strong><span>Kumbh Mela + CrowdHuman data</span></div>
+      <div class="arch-item"><strong>MLflow Pipeline</strong><span>Continuous retraining (production)</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--ink);color:rgba(245,240,232,0.5);font-family:var(--mono);font-size:11px;padding:16px 24px;margin-top:2px;border:2px solid var(--ink)">
+    ↑ Data flows left→right: raw pixels → structured readings → risk scores → human-readable reports
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section class="section" id="components">
+  <div class="section-label">03 · Component Reference</div>
+  <h2>What Each<br>Program Does</h2>
+
+  <div class="comp-grid">
+
+    <div class="comp-card flask">
+      <div class="comp-file">app.py</div>
+      <h3>Flask Application</h3>
+      <p>The central web server. Serves the operator dashboard, handles all HTTP requests, and streams real-time data to connected browsers.</p>
+      <ul class="feat-list">
+        <li>Serves command center dashboard UI at <code>/</code></li>
+        <li>REST API endpoints for cameras, alerts, incidents</li>
+        <li>Server-Sent Events (SSE) for live data push to browser</li>
+        <li>Integrates crowd simulator + SLM engine at startup</li>
+        <li>Handles WebSocket connections for live zone updates</li>
+        <li>Incident report endpoint (calls Claude API)</li>
+        <li>Routes: <code>/api/dashboard/summary</code>, <code>/api/alerts</code>, <code>/ws</code></li>
+      </ul>
+    </div>
+
+    <div class="comp-card simulator">
+      <div class="comp-file">crowd_simulator.py</div>
+      <h3>Crowd Simulation Engine</h3>
+      <p>Generates realistic, time-varying crowd data for all 10 ghat zones. Replaces live cameras in demo/test mode. Runs as a background thread.</p>
+      <ul class="feat-list">
+        <li>Simulates density, inflow/outflow, temperature, rain</li>
+        <li>Models time-of-day peaks (5–8am & 5–7pm)</li>
+        <li>2% chance/tick of spontaneous surge event per zone</li>
+        <li>Sinusoidal day cycle + Gaussian noise + drift</li>
+        <li><code>get_all_snapshots()</code> — returns live state dict</li>
+        <li><code>force_incident(ghat)</code> — triggers RED alert instantly</li>
+        <li>Publishes to SQLite DB + in-memory state every 2.5s</li>
+      </ul>
+    </div>
+
+    <div class="comp-card ai">
+      <div class="comp-file">slm_engine.py</div>
+      <h3>AI / SLM Engine</h3>
+      <p>The intelligence core. Loads trained ML models, processes crowd snapshots, and outputs risk scores, alert levels, and response messages.</p>
+      <ul class="feat-list">
+        <li>Loads <code>slm_bundle.pkl</code> (sklearn pipeline) at startup</li>
+        <li>Predicts alert level: GREEN / YELLOW / ORANGE / RED</li>
+        <li>Detects anomalies: stampede risk, loitering, surges</li>
+        <li>Generates actionable alert text from templates</li>
+        <li>Scores every zone snapshot — 10 zones × every 2.5s</li>
+        <li>Feeds results to Flask alert dispatcher</li>
+        <li>Configurable thresholds in engine config</li>
+      </ul>
+    </div>
+
+    <div class="comp-card data">
+      <div class="comp-file">data/ · models/</div>
+      <h3>Data & Model Store</h3>
+      <p>Persists all operational data and trained model artifacts. SQLite for development; upgrades to PostgreSQL in production.</p>
+      <ul class="feat-list">
+        <li><code>data/godavari_isms.db</code> — SQLite operational DB</li>
+        <li><code>data/historical_patterns/</code> — baseline crowd data</li>
+        <li><code>data/training_scenarios/</code> — incident examples</li>
+        <li><code>models/slm_bundle.pkl</code> — trained ML model</li>
+        <li><code>models/response_templates.json</code> — alert text</li>
+        <li>Tables: cameras, crowd_readings, alerts, incidents</li>
+        <li>Redis cache layer for real-time zone state</li>
+      </ul>
+    </div>
+
+    <div class="comp-card ui">
+      <div class="comp-file">frontend/ · templates/ · static/</div>
+      <h3>Dashboard UI</h3>
+      <p>The operator-facing command center. Built in React 18 with canvas-rendered maps, live camera feeds, and real-time alert panels.</p>
+      <ul class="feat-list">
+        <li>Overview: 10-zone status grid + ghat heatmap</li>
+        <li>Ghat Map: Canvas-rendered Godavari river + zones</li>
+        <li>Camera Feeds: 5 simulated feeds with AI bounding boxes</li>
+        <li>Alert Log: Real-time alert stream with resolve action</li>
+        <li>AI Reports: One-click Claude bilingual report generation</li>
+        <li>Response Protocol: G/Y/O/R reference + current actions</li>
+        <li>WebSocket consumer — updates every 2 seconds</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- DATA FLOW -->
+<section class="section" id="dataflow">
+  <div class="section-label">04 · Data Flow Diagram</div>
+  <h2>End-to-End<br>Data Pipeline</h2>
+  <p>This shows how data travels from raw input sources through every processing stage to the final operator-facing outputs.</p>
+
+  <div class="flow-wrap" style="margin-top:32px">
+
+    <!-- Row 1: Inputs -->
+    <div style="margin-bottom:32px">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:12px;border-bottom:1px solid rgba(21,101,192,0.3);padding-bottom:6px">UPSTREAM SOURCES</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="df-box src">📹 IP Cameras<div class="df-sub">4,000+ RTSP streams</div></div>
+        <div class="df-arrow">→</div>
+        <div class="df-box src">🧪 Crowd Simulator<div class="df-sub">Demo / test mode</div></div>
+        <div class="df-arrow">→</div>
+        <div class="df-box src">🌤️ Weather Sensors<div class="df-sub">Temp, rain, humidity</div></div>
+        <div class="df-arrow">→</div>
+        <div class="df-box src">📊 Historical DB<div class="df-sub">Kumbh / CrowdHuman</div></div>
+      </div>
+    </div>
+
+    <!-- Row 2: Ingestion -->
+    <div style="margin-bottom:8px;display:flex;align-items:center;gap:6px">
+      <div style="font-family:var(--mono);font-size:9px;color:rgba(10,14,26,0.35)">DATA INGESTION LAYER</div>
+      <div style="flex:1;height:1px;background:rgba(10,14,26,0.1)"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px">
+      <div class="df-box proc">OpenCV Frame Capture<div class="df-sub">cv2.VideoCapture</div></div>
+      <div class="df-arrow">+</div>
+      <div class="df-box proc">YOLOv8n Inference<div class="df-sub">Person detection</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-box proc">Density Calculator<div class="df-sub">persons/m² per zone</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-box store">crowd_readings table<div class="df-sub">SQLite / PostgreSQL</div></div>
+    </div>
+
+    <!-- Row 3: AI Processing -->
+    <div style="margin-bottom:8px;display:flex;align-items:center;gap:6px">
+      <div style="font-family:var(--mono);font-size:9px;color:rgba(10,14,26,0.35)">AI PROCESSING LAYER</div>
+      <div style="flex:1;height:1px;background:rgba(10,14,26,0.1)"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px">
+      <div class="df-box ai">SLM Engine<div class="df-sub">slm_engine.py</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-box ai">Risk Scorer<div class="df-sub">slm_bundle.pkl</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-box ai">Alert Level<div class="df-sub">G / Y / O / RED</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-box ai">Claude API<div class="df-sub">Incident narration</div></div>
+    </div>
+
+    <!-- Row 4: Distribution -->
+    <div style="margin-bottom:8px;display:flex;align-items:center;gap:6px">
+      <div style="font-family:var(--mono);font-size:9px;color:rgba(10,14,26,0.35)">DISTRIBUTION LAYER</div>
+      <div style="flex:1;height:1px;background:rgba(10,14,26,0.1)"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px">
+      <div class="df-box proc">Flask App<div class="df-sub">app.py dispatcher</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-box proc">Redis Cache<div class="df-sub">Live zone state</div></div>
+      <div class="df-arrow">+</div>
+      <div class="df-box proc">Kafka Topics<div class="df-sub">godavari-alerts</div></div>
+      <div class="df-arrow">+</div>
+      <div class="df-box store">Alerts DB table<div class="df-sub">Persistent log</div></div>
+    </div>
+
+    <!-- Row 5: Outputs -->
+    <div style="margin-bottom:8px;display:flex;align-items:center;gap:6px">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--green)">DOWNSTREAM OUTPUTS</div>
+      <div style="flex:1;height:1px;background:rgba(21,94,32,0.2)"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="df-box out">🖥️ Command Dashboard<div class="df-sub">React, WebSocket</div></div>
+      <div class="df-arrow" style="color:var(--paper);background:var(--ink);padding:8px;font-size:14px">+</div>
+      <div class="df-box out">📱 SMS / WhatsApp<div class="df-sub">Twilio / Everbridge</div></div>
+      <div class="df-arrow" style="color:var(--paper);background:var(--ink);padding:8px;font-size:14px">+</div>
+      <div class="df-box out">📋 AI Incident Reports<div class="df-sub">English + Telugu</div></div>
+      <div class="df-arrow" style="color:var(--paper);background:var(--ink);padding:8px;font-size:14px">+</div>
+      <div class="df-box out">📢 PA Announcements<div class="df-sub">Zone speaker system</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STREAMS -->
+<section class="section" id="streams">
+  <div class="section-label">05 · Upstream & Downstream</div>
+  <h2>Integration<br>Map</h2>
+  <p>Every external system the AI-ISMS connects to — what it receives (upstream) and what it sends or feeds (downstream).</p>
+
+  <table class="stream-table">
+    <thead>
+      <tr>
+        <th>System / Component</th>
+        <th>Direction</th>
+        <th>Protocol / Interface</th>
+        <th>What It Provides or Receives</th>
+        <th>Used In</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>IP Cameras (4,000+)</td>
+        <td><span class="tag-up">UPSTREAM</span></td>
+        <td>RTSP over fiber / 5G</td>
+        <td>H.265 video streams at 25fps per camera; ingested by OpenCV pipeline</td>
+        <td>Edge Layer · YOLOv8n inference</td>
+      </tr>
+      <tr>
+        <td>Crowd Simulator</td>
+        <td><span class="tag-internal">INTERNAL</span></td>
+        <td>Python function call</td>
+        <td>Synthetic crowd readings (density, inflow, surge flags) replacing live cameras in demo mode</td>
+        <td>crowd_simulator.py → app.py → SLM</td>
+      </tr>
+      <tr>
+        <td>CrowdHuman Dataset</td>
+        <td><span class="tag-up">UPSTREAM</span></td>
+        <td>File (training only)</td>
+        <td>150,000+ annotated images used to train YOLOv8n for dense crowd detection</td>
+        <td>Model training pipeline</td>
+      </tr>
+      <tr>
+        <td>Kumbh Mela Data</td>
+        <td><span class="tag-up">UPSTREAM</span></td>
+        <td>File (training only)</td>
+        <td>Historical crowd patterns and stampede incident records for baseline calibration</td>
+        <td>SLM model training · risk scoring</td>
+      </tr>
+      <tr>
+        <td>VIRAT / UCF-QNRF</td>
+        <td><span class="tag-up">UPSTREAM</span></td>
+        <td>File (training only)</td>
+        <td>Surveillance scenario and crowd counting datasets for anomaly detection training</td>
+        <td>slm_bundle.pkl training</td>
+      </tr>
+      <tr>
+        <td>Anthropic Claude API</td>
+        <td><span class="tag-up">UPSTREAM</span></td>
+        <td>HTTPS REST · anthropic SDK</td>
+        <td>Generates bilingual incident reports (English + Telugu) from structured alert payloads</td>
+        <td>llm_reporter.py → incidents API</td>
+      </tr>
+      <tr>
+        <td>OpenAI GPT-4</td>
+        <td><span class="tag-up">UPSTREAM</span></td>
+        <td>HTTPS REST · openai SDK</td>
+        <td>Fallback LLM for incident narration when Claude API is unavailable</td>
+        <td>llm_reporter.py (fallback)</td>
+      </tr>
+      <tr>
+        <td>Redis</td>
+        <td><span class="tag-internal">INTERNAL</span></td>
+        <td>TCP · redis-py</td>
+        <td>Caches live zone state (density, level, surge) for sub-millisecond reads by dashboard API</td>
+        <td>app.py → dashboard/summary</td>
+      </tr>
+      <tr>
+        <td>Apache Kafka</td>
+        <td><span class="tag-internal">INTERNAL</span></td>
+        <td>TCP · kafka-python</td>
+        <td>Durable event stream for alerts and crowd events; enables replay and external consumers</td>
+        <td>Alert dispatcher → topics</td>
+      </tr>
+      <tr>
+        <td>SQLite / PostgreSQL</td>
+        <td><span class="tag-internal">INTERNAL</span></td>
+        <td>SQLAlchemy async</td>
+        <td>Persists crowd_readings, alerts, incidents, cameras tables; audit trail for post-event analysis</td>
+        <td>All backend services</td>
+      </tr>
+      <tr>
+        <td>React Dashboard</td>
+        <td><span class="tag-down">DOWNSTREAM</span></td>
+        <td>WebSocket + REST</td>
+        <td>Receives live zone updates every 2s; renders heatmap, camera feeds, alert log, AI reports</td>
+        <td>Command center operators</td>
+      </tr>
+      <tr>
+        <td>Twilio SMS</td>
+        <td><span class="tag-down">DOWNSTREAM</span></td>
+        <td>HTTPS REST · twilio SDK</td>
+        <td>Sends SMS / WhatsApp alerts to field commanders when ORANGE or RED threshold is breached</td>
+        <td>Alert dispatcher → twilio API</td>
+      </tr>
+      <tr>
+        <td>AP Police / CCTNS</td>
+        <td><span class="tag-down">DOWNSTREAM</span></td>
+        <td>API integration (prod)</td>
+        <td>Receives ANPR watchlist match results and RED zone alerts for police response dispatch</td>
+        <td>Production Phase 4 integration</td>
+      </tr>
+      <tr>
+        <td>Prometheus / Grafana</td>
+        <td><span class="tag-down">DOWNSTREAM</span></td>
+        <td>HTTP scrape · prom-client</td>
+        <td>System health metrics (latency, throughput, GPU utilization) for ops monitoring</td>
+        <td>DevOps monitoring dashboard</td>
+      </tr>
+      <tr>
+        <td>Everbridge / PA System</td>
+        <td><span class="tag-down">DOWNSTREAM</span></td>
+        <td>SaaS API (production)</td>
+        <td>Multi-channel mass notification: SMS blast, PA zone announcements, WhatsApp to pilgrims</td>
+        <td>Production RED alert response</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ALERT LEVELS -->
+<section class="section" id="alerts">
+  <div class="section-label">06 · Alert System</div>
+  <h2>Response<br>Protocol</h2>
+  <p>The system maintains a five-state alert model for each zone. Levels are predicted by the SLM engine every tick and escalated automatically when thresholds are breached.</p>
+
+  <div class="alert-grid">
+    <div class="alert-cell g">
+      <div class="alert-badge badge-g">GREEN</div>
+      <strong>Safe</strong>
+      <p>Density &lt; 3.5 p/m²<br>Routine monitoring only</p>
+    </div>
+    <div class="alert-cell y">
+      <div class="alert-badge badge-y">YELLOW</div>
+      <strong>Elevated</strong>
+      <p>3.5 – 5.0 p/m²<br>Restrict entry, alert staff</p>
+    </div>
+    <div class="alert-cell o">
+      <div class="alert-badge badge-o">ORANGE</div>
+      <strong>High Risk</strong>
+      <p>5.0 – 7.0 p/m²<br>Close entry, deploy dispersal</p>
+    </div>
+    <div class="alert-cell r">
+      <div class="alert-badge badge-r">RED</div>
+      <strong>Critical</strong>
+      <p>≥ 7.0 p/m²<br>Full lockdown + NDRF</p>
+    </div>
+    <div class="alert-cell s">
+      <div class="alert-badge badge-s">SUSPICIOUS</div>
+      <strong>AI Anomaly</strong>
+      <p>ML-detected pattern deviation — loitering, panic dispersal, unattended object</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h3>Alert Trigger Logic</h3>
+  <div class="code-block">
+<span class="comment"># slm_engine.py — alert level prediction</span>
+<span class="keyword">def</span> <span class="fn">predict_alert_level</span>(snapshot: dict) -> str:
+    density     = snapshot[<span class="string">"density"</span>]       <span class="comment"># persons/m²</span>
+    inflow_rate = snapshot[<span class="string">"inflow_rate"</span>]   <span class="comment"># delta persons/min</span>
+    anomaly     = snapshot[<span class="string">"anomaly_score"</span>] <span class="comment"># 0.0 – 1.0 from ML model</span>
+
+    <span class="keyword">if</span> anomaly > 0.75:
+        <span class="keyword">return</span> <span class="string">"SUSPICIOUS"</span>          <span class="comment"># AI anomaly override</span>
+    <span class="keyword">elif</span> density >= THRESHOLD_RED:
+        <span class="keyword">return</span> <span class="string">"RED"</span>
+    <span class="keyword">elif</span> density >= THRESHOLD_ORANGE:
+        <span class="keyword">return</span> <span class="string">"ORANGE"</span>
+    <span class="keyword">elif</span> density >= THRESHOLD_YELLOW:
+        <span class="keyword">return</span> <span class="string">"YELLOW"</span>
+    <span class="keyword">return</span> <span class="string">"GREEN"</span>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section class="section" id="setup">
+  <div class="section-label">07 · Setup Guide</div>
+  <h2>Getting<br>Running</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Clone the project & run setup</h3>
+        <p>The setup script installs all Python and Node.js dependencies, downloads the YOLOv8n model, initializes the SQLite database with seed data (50 cameras across 10 zones), and creates <code>.env</code> from the template.</p>
+        <div class="code-block">bash setup.sh</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Add your Anthropic API key</h3>
+        <p>The AI incident report feature (bilingual English + Telugu) requires a Claude API key. Get one free at <strong>console.anthropic.com</strong>. The system runs in demo mode without it.</p>
+        <div class="code-block"><span class="comment"># .env</span>
+ANTHROPIC_API_KEY=sk-ant-api03-<span class="string">your-key-here</span>
+LLM_PROVIDER=anthropic
+LLM_MODEL=claude-sonnet-4-20250514</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Start all services</h3>
+        <p>Starts the FastAPI backend (port 8000) and React frontend (port 3000). The crowd simulation engine starts automatically and begins generating live data for all 10 zones.</p>
+        <div class="code-block">bash start.sh</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Or use Docker (full stack)</h3>
+        <p>Docker Compose spins up 7 services: FastAPI, React, PostgreSQL 16, Redis 7, Kafka, Prometheus, and Grafana — production-equivalent environment in one command.</p>
+        <div class="code-block">docker-compose up --build
+
+<span class="comment"># Dashboard:  http://localhost:3000</span>
+<span class="comment"># API:        http://localhost:8000</span>
+<span class="comment"># API Docs:   http://localhost:8000/docs</span>
+<span class="comment"># Grafana:    http://localhost:3001</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Test the AI: force an incident</h3>
+        <p>Use the Python API to immediately trigger a RED alert on any ghat — useful for testing alert dispatch, SMS simulation, and Claude incident report generation.</p>
+        <div class="code-block"><span class="keyword">from</span> app.services.crowd_simulator <span class="keyword">import</span> simulator
+
+<span class="comment"># Immediately push Pushkar Ghat to RED</span>
+simulator.<span class="fn">force_incident</span>(<span class="string">"Pushkar Ghat 1"</span>)
+
+<span class="comment"># Fetch all live zone snapshots</span>
+snaps = simulator.<span class="fn">get_all_snapshots</span>()
+<span class="keyword">for</span> zone, data <span class="keyword">in</span> snaps.items():
+    print(zone, data[<span class="string">"density"</span>], data[<span class="string">"level"</span>])</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API -->
+<section class="section" id="api">
+  <div class="section-label">08 · API Reference</div>
+  <h2>Endpoints<br>& WebSocket</h2>
+
+  <table class="stream-table">
+    <thead>
+      <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
+        <th>Returns</th>
+        <th>Used By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>/health</td>
+        <td>GET</td>
+        <td>System status + version</td>
+        <td>Docker healthcheck, uptime monitors</td>
+      </tr>
+      <tr>
+        <td>/api/dashboard/summary</td>
+        <td>GET</td>
+        <td>All 10 zones live state, alert counts, total crowd</td>
+        <td>React dashboard overview tab</td>
+      </tr>
+      <tr>
+        <td>/api/dashboard/heatmap</td>
+        <td>GET</td>
+        <td>Lat/lng intensity points for Leaflet.js</td>
+        <td>Ghat map heatmap layer</td>
+      </tr>
+      <tr>
+        <td>/api/cameras/</td>
+        <td>GET</td>
+        <td>All 50 cameras with zone, ghat, coordinates</td>
+        <td>Camera feeds tab, map markers</td>
+      </tr>
+      <tr>
+        <td>/api/alerts/</td>
+        <td>GET</td>
+        <td>Last 50 alerts with level, zone, timestamp</td>
+        <td>Alert log tab</td>
+      </tr>
+      <tr>
+        <td>/api/alerts/{id}/resolve</td>
+        <td>PATCH</td>
+        <td>Marks alert resolved, sets resolved_at</td>
+        <td>Operator resolve action</td>
+      </tr>
+      <tr>
+        <td>/api/incidents/generate-report</td>
+        <td>POST</td>
+        <td>Claude-generated EN + TE incident report</td>
+        <td>AI Reports tab, auto-trigger on RED</td>
+      </tr>
+      <tr>
+        <td>/api/incidents/</td>
+        <td>GET</td>
+        <td>Incident history with full bilingual reports</td>
+        <td>Incident log, audit trail</td>
+      </tr>
+      <tr>
+        <td>/api/crowd/history</td>
+        <td>GET</td>
+        <td>Last 200 density readings, filterable by zone</td>
+        <td>Analytics charts, ML retraining</td>
+      </tr>
+      <tr>
+        <td>/api/analytics/zone-summary</td>
+        <td>GET</td>
+        <td>Aggregated density + level per zone</td>
+        <td>Response protocol panel</td>
+      </tr>
+      <tr>
+        <td>/ws</td>
+        <td>WebSocket</td>
+        <td>Live crowd_update events every 2s, alert pushes</td>
+        <td>All real-time dashboard panels</td>
+      </tr>
+      <tr>
+        <td>/docs</td>
+        <td>GET</td>
+        <td>Swagger UI — interactive API explorer</td>
+        <td>Developers, integration testing</td>
+      </tr>
+      <tr>
+        <td>/metrics</td>
+        <td>GET</td>
+        <td>Prometheus metrics (latency, throughput, errors)</td>
+        <td>Grafana monitoring dashboard</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:48px">
+    <h3>WebSocket Message Format</h3>
+    <div class="code-block"><span class="comment">// Received by React dashboard every ~2 seconds</span>
+{
+  <span class="string">"type"</span>: <span class="string">"crowd_update"</span>,
+  <span class="string">"timestamp"</span>: <span class="string">"2025-06-15T06:32:11Z"</span>,
+  <span class="string">"zones"</span>: [
+    {
+      <span class="string">"zone"</span>: <span class="string">"Zone-1"</span>,
+      <span class="string">"ghat"</span>: <span class="string">"Pushkar Ghat"</span>,
+      <span class="string">"density"</span>: 6.4,          <span class="comment">// persons/m²</span>
+      <span class="string">"person_count"</span>: 640,
+      <span class="string">"level"</span>: <span class="string">"ORANGE"</span>,
+      <span class="string">"surge"</span>: <span class="keyword">false</span>
+    }
+    <span class="comment">// ... 9 more zones</span>
+  ],
+  <span class="string">"alerts"</span>: [          <span class="comment">// Only present when threshold crossed</span>
+    {
+      <span class="string">"alert_id"</span>: <span class="string">"a9f3..."</span>,
+      <span class="string">"zone"</span>: <span class="string">"Zone-1"</span>,
+      <span class="string">"level"</span>: <span class="string">"ORANGE"</span>,
+      <span class="string">"message"</span>: <span class="string">"⚠️ Crowd density ORANGE at Pushkar Ghat: 6.4 p/m²"</span>
+    }
+  ]
+}</div>
+  </div>
+</section>
+
+<footer>
+  <div>GODAVARI PUSHKARALU 2025 · AI-ISMS TECHNICAL REFERENCE · <span>CONFIDENTIAL</span></div>
+  <div>PHASE 0 MVP · v1.0 · SECURITY ARCHITECTURE TEAM</div>
+</footer>
+
+</body>
+</html>

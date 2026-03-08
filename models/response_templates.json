@@ -1,0 +1,27 @@
+{
+  "GREEN": [
+    "Crowd density at {ghat} is {density} persons/m\u00b2 \u2014 within safe limits. Continue standard monitoring protocol.",
+    "Zone {ghat} shows normal crowd flow. All parameters nominal. No action required.",
+    "Current density {density} p/m\u00b2 at {ghat} is acceptable. Routine surveillance active."
+  ],
+  "YELLOW": [
+    "\u26a0 ELEVATED ALERT: {ghat} density rising to {density} p/m\u00b2. Recommend restricting new entries by 30%. Alert crowd management personnel.",
+    "\u26a0 Crowd buildup detected at {ghat}: {density} p/m\u00b2. Pre-position response team. Activate PA announcements directing pilgrims to alternate ghats.",
+    "\u26a0 YELLOW STATUS at {ghat}. Net inflow positive by {net_flow:,}. Monitor closely \u2014 escalation possible within {eta:.0f} minutes if trend continues."
+  ],
+  "ORANGE": [
+    "\ud83d\udd34 HIGH RISK: {ghat} density {density} p/m\u00b2 exceeds safe threshold. CLOSE ghat entry gates immediately. Deploy crowd dispersal team. Redirect to {alt_ghat}.",
+    "\ud83d\udd34 ORANGE ALERT activated \u2014 {ghat}. Crowd model predicts {pred_density:.1f} p/m\u00b2 in 15 minutes. Emergency response protocol initiated. All personnel report to Zone {zone_id}.",
+    "\ud83d\udd34 URGENT: Bidirectional crowd flow detected at {ghat} ({density} p/m\u00b2). Stampede risk ELEVATED. Block entry, open all exit routes. Broadcast PA emergency message."
+  ],
+  "RED": [
+    "\ud83d\udea8 CRITICAL EMERGENCY \u2014 {ghat}: Density {density} p/m\u00b2 \u2014 STAMPEDE RISK IMMINENT. FULL LOCKDOWN. Deploy Police + NDRF immediately. Activate mass emergency broadcast. Medical teams to Ghat {zone_id}.",
+    "\ud83d\udea8 RED ALERT: {ghat} at {density} p/m\u00b2 \u2014 LIFE THREATENING. Initiate emergency crowd dispersal. All available units to Zone {zone_id}. Sound alarm. Call District Collector now.",
+    "\ud83d\udea8 MAXIMUM EMERGENCY \u2014 ALL UNITS RESPOND. {ghat} critical density {density} p/m\u00b2. Evacuation initiated. Medical Emergency declared. Helicopter standby requested."
+  ],
+  "SUSPICIOUS": [
+    "\u26a0 AI Detection: Suspicious pattern at {ghat} \u2014 {reason}. Dispatching security officer to investigate. Camera {camera_id} recording.",
+    "\u26a0 Anomaly detected by AI at {ghat}: {reason}. Risk score: {risk:.1f}/10. Operator review required.",
+    "\u26a0 Behavioral anomaly at {ghat} \u2014 AI confidence {confidence:.0f}%. Likely: {reason}. Logging incident. Security alert dispatched."
+  ]
+}
